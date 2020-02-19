@@ -54,7 +54,8 @@
         [html-render (:title active-content)]]]
     [:div.term-description
       [:div.container
-       [html-render (:html active-content)]]]])
+       [html-render (:html active-content)]
+       [html-render (:tag active-content)]]]])
 
 (defn dashboard-view []
     (r/create-class
