@@ -51,7 +51,7 @@
       [:img.view
         {:src "img/view.png"}]
       [:h1.term-title
-        [html-render (:html active-content)]]]
+        [html-render (:title active-content)]]]
     [:div.term-description
       [:div.container
        [html-render (:html active-content)]]]])
