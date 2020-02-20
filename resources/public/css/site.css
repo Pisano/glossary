@@ -25,7 +25,8 @@ h1 {
   top: 0;
   z-index: 11;
   padding-top: 40px;
-  background-color: #42364D;
+  background-color: #fafbfc;
+  border-right:1px solid #d9dbe5;
   display: block;
   box-sizing: border-box;
 }
@@ -54,7 +55,7 @@ h1 {
 }
 .glossary .glossary-aside .glossary-order .glossary-order-inner .order-item {
   display: block;
-  color: #a1aaaf;
+  color: #1a2534;
   padding: .4rem 1rem;
   margin: .15rem 0;
   border-radius: 2rem;
@@ -64,11 +65,11 @@ h1 {
 }
 .glossary .glossary-aside .glossary-order .glossary-order-inner .order-item:hover {
   color: #fff;
-  background-color: #f58d8c;
+  background-color: #2e81e8;
 }
 .glossary .glossary-aside .glossary-order .glossary-order-inner .order-item.is-active {
   color: #fff;
-  background-color: #f58d8c;
+  background-color: #2e81e8;
 }
 .glossary .glossary-terms {
   position: absolute;
@@ -78,12 +79,12 @@ h1 {
   height: 100%;
   margin-left: 120px;
   background-color: #fff;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.12), 0 1px 10px 0 rgba(0, 0, 0, 0.07);
+  box-shadow: 2px 0 5px 0 #d9dbe550;
   overflow: hidden;
 }
 .glossary .glossary-terms .glossary-terms-inner {
   position: relative;
-  padding: 0 2rem 2rem;
+  padding: 110px 2rem 2rem;
   height: 100%;
   overflow-y: auto;
 }
@@ -118,26 +119,38 @@ h1 {
 }
 .glossary .glossary-terms .glossary-terms-inner .glossary-term-container .terms-item {
   display: block;
-  color: #5f6c73;
+  color: #1a2534;
   padding: .6rem 0;
   transition: .2s;
   cursor: pointer;
   font-weight: initial;
 }
+.glossary .glossary-terms .glossary-terms-inner .glossary-term-container .terms-item:hover {
+  color: #2e81e8;
+}
+.glossary .glossary-terms .glossary-terms-inner .glossary-term-container .terms-item.is-active {
+  color: #2e81e8;
+}
 .glossary .glossary-term-enrty {
-  padding-left: 450px;
+  padding-left: 453px;
 }
 .glossary .glossary-term-enrty .term-header {
-  height: 140px;
-  padding-top: 8rem;
+  display: flex;
+  height: 160px;
+  width: auto;
   position: relative;
-  background-color: #867294;
+  background-image: url(../img/view.png);
+  background-position: center;
+  background-size: cover;
 }
 .glossary .glossary-term-enrty .term-header .term-title {
-  color: #fff;
-  text-align: center;
+  color: #1a2534;
+  text-align: left;
   margin: 0;
-  padding: 0;
+  padding-left: 7%;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
 }
 .glossary .glossary-term-enrty .term-header .view {
   position: absolute;
@@ -147,6 +160,16 @@ h1 {
 .glossary .glossary-term-enrty .term-description .container {
   padding: 1rem 7% 3rem;
 }
+.glossary .glossary-term-enrty .term-description .container p strong{
+  font-size:28px;
+  color:#1a2534;
+  font-weight: 800;
+  line-height:32px;
+}
 .glossary .glossary-term-enrty .term-description .container p {
-  font-weight: lighter;
+  color:#1a2534;
+  font-size: 18px;
+}
+hr{
+  display: none;
 }

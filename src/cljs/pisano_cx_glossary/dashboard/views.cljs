@@ -38,18 +38,17 @@
 (defn content-title-box-view [active-letter page active-content]
   [:div.glossary-terms
     [:div.glossary-terms-inner
-      [:div.glossary-terms-header]
       [:div.glossary-term-container
         [:div.term-image-a
           {:key (str "content-title-box-view-" active-letter)}
-          [:img {:src (str "img/" active-letter ".png")}]]
+          ]
         [titles-view active-letter page]]]])
-
+  ; [:img {:src (str "img/" active-letter ".png")}]
 (defn main-box-view [page active-content]
   [:div.glossary-term-enrty
     [:div.term-header
-      [:img.view
-        {:src "img/view.png"}]
+      ; [:img.view
+      ;   {:src "img/view.png"}]
       [:h1.term-title
         [html-render (:title active-content)]]]
     [:div.term-description
