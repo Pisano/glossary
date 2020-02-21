@@ -13,6 +13,10 @@
   (when config/debug?
     (println "dev mode")))
 
+(defn init-centry
+[]
+(.init js/Sentry (clj->js {:dsn "https://d2764b45c15449eeae761378a04b07c7@sentry.io/1882745"})))
+
 (defn ^:dev/after-load mount-root []
   (re-frame/clear-subscription-cache!)
   (reagent/render [views/main-panel]

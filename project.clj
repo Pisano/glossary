@@ -16,7 +16,9 @@
 
   :plugins [
             [lein-less "1.7.5"]
-            [lein-shell "0.5.0"]]
+            [lein-shell "0.5.0"]
+            [lein-kibit "0.1.8"]
+            [lein-cljfmt "0.6.4"]]
 
   :min-lein-version "2.5.3"
 
