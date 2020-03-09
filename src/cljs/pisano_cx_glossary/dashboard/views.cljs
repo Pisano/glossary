@@ -4,7 +4,7 @@
            [pisano-cx-glossary.dashboard.subs :as subs]
            [clojure.string :as str]))
 
-(def letters ["A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W"])
+(def letters ["A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z"])
 
 (defn html-render [content]
   [:div
@@ -43,12 +43,9 @@
           {:key (str "content-title-box-view-" active-letter)}
           ]
         [titles-view active-letter page]]]])
-  ; [:img {:src (str "img/" active-letter ".png")}]
 (defn main-box-view [page active-content]
   [:div.glossary-term-enrty
     [:div.term-header
-      ; [:img.view
-      ;   {:src "img/view.png"}]
       [:h1.term-title
         [html-render (:title active-content)]]]
     [:div.term-description
