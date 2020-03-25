@@ -18,8 +18,7 @@
     (let [pages      (:pages response)
           new-data   (into pages data)
           filter-data (filterv #(= "cx-vocabulary" (-> % :primary_tag :slug)) new-data)
-          group-data (group-by (fn [d]
-                                  (some-> d :title (subs 0 1) str/upper-case)) filter-data)]
+          group-data (group-by (fn [d] (some-> d :title (subs 0 1) util/upper-case)) filter-data)]
       (assoc db :data group-data))))
 
 (reg-event-db

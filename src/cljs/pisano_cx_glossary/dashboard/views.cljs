@@ -1,10 +1,7 @@
 (ns pisano-cx-glossary.dashboard.views
  (:require [reagent.core :as r]
            [re-frame.core :refer [dispatch subscribe]]
-           [pisano-cx-glossary.dashboard.subs :as subs]
-           [clojure.string :as str]))
-
-(def letters ["A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z"])
+           [pisano-cx-glossary.dashboard.subs :as subs]))
 
 (defn html-render [content]
   [:div
@@ -22,27 +19,26 @@
         (fn [l]
           [:div.order-item
            {:on-click #(dispatch [:add-data [:active-letter] l])
-            :class (when (= l active-letter)
-                      "is-active")}
-           l]) letters))]]])
+            :class (when (= l active-letter) "is-active")}
+           l]) (or (keys @(subscribe [::subs/data]))
+                   (map char (range 65 (inc 90))))))]]])
 
 (defn titles-view [active-letter page]
   [:div
-    (doall
-      (map
-        (fn [d]
-          [:a.terms-item
-            {:on-click #(dispatch [:add-data [:active-content-id] (:id d)])}
-            (:title d)]) page))])
+   (doall
+     (for [p (sort-by :title page)]
+       [:a.terms-item
+        {:on-click #(dispatch [:add-data [:active-content-id] (:id p)])}
+        (:title p)]))])
 
 (defn content-title-box-view [active-letter page active-content]
   [:div.glossary-terms
     [:div.glossary-terms-inner
       [:div.glossary-term-container
         [:div.term-image-a
-          {:key (str "content-title-box-view-" active-letter)}
-          ]
+          {:key (str "content-title-box-view-" active-letter)}]
         [titles-view active-letter page]]]])
+
 (defn main-box-view [page active-content]
   [:div.glossary-term-enrty
     [:div.term-header
@@ -59,8 +55,7 @@
        :reagent-render (fn []
                           (let [page           @(subscribe[::subs/active-page])
                                 active-letter  @(subscribe[::subs/active-letter])
-                                active-content @(subscribe[::subs/active-content])
-                                _ (println active-content)]
+                                active-content @(subscribe[::subs/active-content])]
                             [:div.glossary.glossary-entry.is-active
                              [vocabulary-box-view active-letter]
                              [content-title-box-view active-letter page active-content]

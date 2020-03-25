@@ -26,7 +26,7 @@ h1 {
   z-index: 11;
   padding-top: 40px;
   background-color: #fafbfc;
-  border-right:1px solid #d9dbe5;
+  border-right: 1px solid #d9dbe5;
   display: block;
   box-sizing: border-box;
 }
@@ -39,7 +39,7 @@ h1 {
 .glossary .glossary-aside .glossary-order {
   position: relative;
   z-index: 1;
-  height: calc(~"100vh - 76px");
+  height: calc(100vh - 76px);
   overflow: hidden;
   width: 120px;
   margin-top: 10px;
@@ -47,7 +47,7 @@ h1 {
 }
 .glossary .glossary-aside .glossary-order .glossary-order-inner {
   padding: 1.5rem 2.2rem;
-  width: calc(~"100% + 36px");
+  width: calc(100% + 36px);
   height: 100%;
   margin-left: -18px;
   overflow-y: auto;
@@ -160,16 +160,16 @@ h1 {
 .glossary .glossary-term-enrty .term-description .container {
   padding: 1rem 7% 3rem;
 }
-.glossary .glossary-term-enrty .term-description .container p strong{
-  font-size:28px;
-  color:#1a2534;
+.glossary .glossary-term-enrty .term-description .container p strong {
+  font-size: 28px;
+  color: #1a2534;
   font-weight: 800;
-  line-height:32px;
+  line-height: 32px;
 }
 .glossary .glossary-term-enrty .term-description .container p {
-  color:#1a2534;
+  color: #1a2534;
   font-size: 18px;
 }
-hr{
+hr {
   display: none;
 }
