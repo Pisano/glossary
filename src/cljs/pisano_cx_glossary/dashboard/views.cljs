@@ -19,20 +19,19 @@
    [:div.glossary-order
     [:div.glossary-order-inner
      (doall
-       (map
-         (fn [l]
-           [:div.order-item
-            {:on-click #(do
-                          (dispatch-sync [:add-data [:active-letter] l])
-                          (util/sleep (fn []
-                                        (let [active-page    (->> @(subscribe [::subs/active-page]) (util/sort-by-locale :title) first)
-                                              active-page-id (:id active-page)]
-                                          (dispatch [:add-data :active-content-id active-page-id])
-                                          (util/change-title! (:title active-page))))
-                                      150))
-             :class    (when (= l active-letter) "is-active")}
-            l]) (or (util/sort-by-locale (keys @(subscribe [::subs/data])))
-                    (map char (range 65 (inc 90))))))]]])
+       (for [l (util/sort-by-locale (keys @(subscribe [::subs/data])))]
+         [:div.order-item
+          {:on-click #(when (get @(subscribe [::subs/data]) l)
+                        (dispatch-sync [:add-data [:active-letter] l])
+                        (util/sleep (fn []
+                                      (let [active-page    (->> @(subscribe [::subs/active-page]) (util/sort-by-locale :title) first)
+                                            active-page-id (:id active-page)]
+                                        (dispatch [:add-data :active-content-id active-page-id])
+                                        (util/change-title! (:title active-page))))
+                                    150))
+           :class    (when (= l active-letter) "is-active")
+           :style    (when-not (get @(subscribe [::subs/data]) l) {:color "#d9dbe5"})}
+          l]))]]])
 
 
 (defn- titles-view [active-letter page]
