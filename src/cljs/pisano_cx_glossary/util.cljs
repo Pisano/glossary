@@ -29,3 +29,13 @@
           (str/replace #"ğ" "Ğ")
           (str/replace #"ş" "Ş")
           (str/upper-case)))
+
+
+(defn sleep
+  [f ms]
+  (js/setTimeout f ms))
+
+
+(defn change-title!
+  [title]
+  (set! (.-title js/document) (str title " - Müşteri Deneyimi Sözlüğü")))

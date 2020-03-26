@@ -84,7 +84,7 @@ h1 {
 }
 .glossary .glossary-terms .glossary-terms-inner {
   position: relative;
-  padding: 110px 2rem 2rem;
+  padding: 5px 2rem 2rem;
   height: 100%;
   overflow-y: auto;
 }
