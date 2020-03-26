@@ -68,7 +68,7 @@
 
 (defn dashboard-view []
   (r/create-class
-    {:component-did-mount #(dispatch [::events/get-pages])
+    {:component-will-mount #(dispatch [::events/get-pages])
      :reagent-render      (fn []
                             (let [page           @(subscribe [::subs/active-page])
                                   active-letter  @(subscribe [::subs/active-letter])
