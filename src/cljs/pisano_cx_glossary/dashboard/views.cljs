@@ -25,20 +25,20 @@
             {:on-click #(do
                           (dispatch-sync [:add-data [:active-letter] l])
                           (util/sleep (fn []
-                                        (let [active-page    (->> @(subscribe [::subs/active-page]) (sort-by :title) first)
+                                        (let [active-page    (->> @(subscribe [::subs/active-page]) (util/sort-by-locale :title) first)
                                               active-page-id (:id active-page)]
                                           (dispatch [:add-data :active-content-id active-page-id])
                                           (util/change-title! (:title active-page))))
                                       150))
              :class    (when (= l active-letter) "is-active")}
-            l]) (or (keys @(subscribe [::subs/data]))
+            l]) (or (util/sort-by-locale (keys @(subscribe [::subs/data])))
                     (map char (range 65 (inc 90))))))]]])
 
 
 (defn- titles-view [active-letter page]
   [:div
    (doall
-     (for [p (sort-by :title page)]
+     (for [p (util/sort-by-locale :title page)]
        [:a.terms-item
         {:on-click #(do
                       (dispatch [:add-data :active-content-id (:id p)])

@@ -31,6 +31,19 @@
           (str/upper-case)))
 
 
+(defn lower-case
+  [s]
+  (some-> s
+      (str/replace #"I" "ı")
+      (str/replace #"İ" "i")
+      (str/replace #"Ç" "ç")
+      (str/replace #"Ö" "ö")
+      (str/replace #"Ü" "ü")
+      (str/replace #"Ğ" "ğ")
+      (str/replace #"Ş" "ş")
+      (str/lower-case)))
+
+
 (defn sleep
   [f ms]
   (js/setTimeout f ms))
@@ -39,3 +52,15 @@
 (defn change-title!
   [title]
   (set! (.-title js/document) (str title " - Müşteri Deneyimi Sözlüğü")))
+
+
+(defn sort-by-locale
+  ([coll]
+   (sort #(.localeCompare %1 %2 "tr") coll))
+  ([k coll]
+   (sort (fn [s1 s2]
+           (let [active-lang "tr"
+                 str1        (or (k s1) "")
+                 str2        (or (k s2) "")]
+             (.localeCompare str1 str2 active-lang)))
+         coll)))
