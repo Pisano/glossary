@@ -3,7 +3,8 @@
             [re-frame.core :refer [dispatch dispatch-sync subscribe]]
             [pisano-cx-glossary.dashboard.events :as events]
             [pisano-cx-glossary.dashboard.subs :as subs]
-            [pisano-cx-glossary.util :as util]))
+            [pisano-cx-glossary.util :as util]
+            [clojure.string :as str]))
 
 
 (defn- html-render [content]
@@ -20,6 +21,7 @@
     [:div.glossary-order-inner
      (doall
        (for [l (util/sort-by-locale (keys @(subscribe [::subs/data])))]
+         ^{:key l}
          [:div.order-item
           {:on-click #(when (get @(subscribe [::subs/data]) l)
                         (dispatch-sync [:add-data [:active-letter] l])
@@ -34,14 +36,20 @@
           l]))]]])
 
 
+(defn- change-uri!
+  [title id]
+  (util/push-state (str "/#/" (some-> title util/lower-case str/trim (str/replace #"\s+" "-")) "/" id)))
+
+
 (defn- titles-view [active-letter page]
   [:div
    (doall
      (for [p (util/sort-by-locale :title page)]
+       ^{:key (:id p)}
        [:a.terms-item
         {:on-click #(do
-                      (dispatch [:add-data :active-content-id (:id p)])
-                      (util/change-title! (:title p)))
+                      (dispatch [::events/find-and-set-content-by-id (:id p)])
+                      (change-uri! (:title p) (:id p)))
          :style    (when (= @(subscribe [::subs/active-content-id]) (:id p)) {:color "#2e81e8"})}
         (:title p)]))])
 
@@ -68,12 +76,19 @@
 
 (defn dashboard-view []
   (r/create-class
-    {:component-will-mount #(dispatch [::events/get-pages])
-     :reagent-render      (fn []
-                            (let [page           @(subscribe [::subs/active-page])
-                                  active-letter  @(subscribe [::subs/active-letter])
-                                  active-content @(subscribe [::subs/active-content])]
-                              [:div.glossary.glossary-entry.is-active
-                               [vocabulary-box-view active-letter]
-                               [content-title-box-view active-letter page active-content]
-                               [main-box-view page active-content]]))}))
+    {:component-will-mount #(do
+                              (dispatch [::events/get-pages])
+                              (let [href (some-> js/window .-location .-href)
+                                    [hash title id] (take-last 3 (str/split href #"/"))]
+                                (when (and (= "#" hash)
+                                           (not (str/blank? title))
+                                           (not (str/blank? id)))
+                                  (dispatch [::events/find-and-set-content-by-id id]))))
+     :reagent-render       (fn []
+                             (let [page           @(subscribe [::subs/active-page])
+                                   active-letter  @(subscribe [::subs/active-letter])
+                                   active-content @(subscribe [::subs/active-content])]
+                               [:div.glossary.glossary-entry.is-active
+                                [vocabulary-box-view active-letter]
+                                [content-title-box-view active-letter page active-content]
+                                [main-box-view page active-content]]))}))

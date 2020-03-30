@@ -3,7 +3,11 @@
             [pisano-cx-glossary.util :as util]
             [clojure.set :as set]))
 
-(def alphabet ["A", "B", "C", "Ç", "D", "E", "F", "G", "H", "I", "İ", "J", "K", "L", "M", "N", "O", "Ö", "P", "R", "S", "Ş", "T", "U", "Ü", "V", "Y", "Z"])
+(def alphabet ["A" "B" "C" "Ç" "D" "E"
+               "F" "G" "H" "I" "İ" "J"
+               "K" "L" "M" "N" "O" "Ö"
+               "P" "R" "S" "Ş" "T" "U"
+               "Ü" "V" "Y" "Z"])
 
 (reg-sub
   ::db

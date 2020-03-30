@@ -3,7 +3,8 @@
    [reagent.core :as reagent]
    [re-frame.core :as re-frame]
    [pisano-cx-glossary.navigation.events :as events]
-   [pisano-cx-glossary.routes :as routes]
+    ; Disabled for now, we are not using ROUTES NAMESPACE
+   ;[pisano-cx-glossary.routes :as routes]
    [pisano-cx-glossary.navigation.views :as views]
    [pisano-cx-glossary.config :as config]
    ))
@@ -19,11 +20,11 @@
 
 (defn ^:dev/after-load mount-root []
   (re-frame/clear-subscription-cache!)
-  (reagent/render [views/main-panel]
-                  (.getElementById js/document "app")))
+  (reagent/render [views/main-panel] (.getElementById js/document "app"))
+  (re-frame/dispatch [::events/set-active-panel :dashboard-panel]))
 
 (defn init []
-  (routes/app-routes)
+  #_(routes/app-routes)
   (re-frame/dispatch-sync [::events/initialize-db])
   (dev-setup)
   (mount-root))

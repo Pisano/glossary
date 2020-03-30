@@ -64,3 +64,8 @@
                  str2        (or (k s2) "")]
              (.localeCompare str1 str2 active-lang)))
          coll)))
+
+
+(defn push-state
+  [uri]
+  (.pushState (.-history js/window) "" "" uri))
