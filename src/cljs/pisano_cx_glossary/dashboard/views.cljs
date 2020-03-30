@@ -13,6 +13,22 @@
     {:__html content}}])
 
 
+(defn- change-uri!
+  [title id]
+  (util/push-state (str "/#/" (some-> title
+                                      util/lower-case
+                                      str/trim
+                                      (str/replace #"\s+" "-")
+                                      (str/replace #"/+" "-")
+                                      (str/replace #"-+" "-")) "/" id)))
+
+
+(defn select-content
+  [title id]
+  (dispatch [::events/find-and-set-content-by-id id])
+  (change-uri! title id))
+
+
 (defn- vocabulary-box-view [active-letter]
   [:div.glossary-aside
    [:a.glossary-logo
@@ -26,19 +42,12 @@
           {:on-click #(when (get @(subscribe [::subs/data]) l)
                         (dispatch-sync [:add-data [:active-letter] l])
                         (util/sleep (fn []
-                                      (let [active-page    (->> @(subscribe [::subs/active-page]) (util/sort-by-locale :title) first)
-                                            active-page-id (:id active-page)]
-                                        (dispatch [:add-data :active-content-id active-page-id])
-                                        (util/change-title! (:title active-page))))
+                                      (let [active-page (->> @(subscribe [::subs/active-page]) (util/sort-by-locale :title) first)]
+                                        (select-content (:title active-page) (:id active-page))))
                                     150))
            :class    (when (= l active-letter) "is-active")
            :style    (when-not (get @(subscribe [::subs/data]) l) {:color "#d9dbe5"})}
           l]))]]])
-
-
-(defn- change-uri!
-  [title id]
-  (util/push-state (str "/#/" (some-> title util/lower-case str/trim (str/replace #"\s+" "-")) "/" id)))
 
 
 (defn- titles-view [active-letter page]
@@ -47,9 +56,7 @@
      (for [p (util/sort-by-locale :title page)]
        ^{:key (:id p)}
        [:a.terms-item
-        {:on-click #(do
-                      (dispatch [::events/find-and-set-content-by-id (:id p)])
-                      (change-uri! (:title p) (:id p)))
+        {:on-click #(select-content (:title p) (:id p))
          :style    (when (= @(subscribe [::subs/active-content-id]) (:id p)) {:color "#2e81e8"})}
         (:title p)]))])
 
