@@ -26,7 +26,7 @@
   (fn [_ [_ n]]
     {:http-xhrio (util/create-custom-request-map :get (str datasource-url "&page=" n)
                                                  ::get-page-data-result-ok
-                                                 ::get-page-data-result-fail)}))
+                                                 [::get-page-data-result-fail n])}))
 
 
 (reg-event-db
@@ -36,10 +36,10 @@
       (assoc db :meta (-> response :meta :pagination (select-keys [:total :pages :limit]))))))
 
 
-(reg-event-db
+(reg-event-fx
   ::get-page-data-result-fail
-  (fn [db _]
-    db))
+  (fn [_ [_ n]]
+    {:dispatch-later [{:ms 1000 :dispatch [::get-page-data n]}]}))
 
 
 (reg-event-db
