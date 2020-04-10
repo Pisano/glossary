@@ -56,3 +56,20 @@
         {:db            (assoc db :active-letter (some-> content :title util/upper-case first str))
          :change-title! (:title content)})
       {:dispatch-later [{:ms 150 :dispatch [::find-and-set-content-by-id id]}]})))
+
+(reg-event-fx
+  ::select-first-content
+  (fn [{:keys [db]} _]
+    (cond
+      (and (-> db :active-content-id not)
+           (= (count (:pages db)) (-> db :meta :total))) (let [pages       (:pages db)
+                                                               filter-data (filterv #(= "cx-vocabulary" (-> % :primary_tag :slug)) pages)
+                                                               group-data  (group-by (fn [d] (some-> d :title (subs 0 1) util/upper-case)) filter-data)
+                                                               contents    (get group-data "A")
+                                                               f-content   (first (util/sort-by-locale :title contents))]
+                                                           {:dispatch [::find-and-set-content-by-id (:id f-content)]})
+
+      (and (-> db :active-content-id not)
+           (not= (count (:pages db)) (-> db :meta :total))) {:dispatch-later [{:ms 200 :dispatch [::select-first-content]}]}
+
+      :else {:db db})))

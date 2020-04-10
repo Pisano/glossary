@@ -87,10 +87,11 @@
                               (dispatch [::events/get-pages])
                               (let [href (some-> js/window .-location .-href)
                                     [hash title id] (take-last 3 (str/split href #"/"))]
-                                (when (and (= "#" hash)
-                                           (not (str/blank? title))
-                                           (not (str/blank? id)))
-                                  (dispatch [::events/find-and-set-content-by-id id]))))
+                                (if (and (= "#" hash)
+                                         (not (str/blank? title))
+                                         (not (str/blank? id)))
+                                  (dispatch [::events/find-and-set-content-by-id id])
+                                  (dispatch [::events/select-first-content]))))
      :reagent-render       (fn []
                              (let [page           @(subscribe [::subs/active-page])
                                    active-letter  @(subscribe [::subs/active-letter])
