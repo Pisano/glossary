@@ -32,6 +32,7 @@
 (defn- vocabulary-box-view [active-letter]
   [:div.glossary-aside
    [:a.glossary-logo
+    {:href "/"}
     [:img {:src "img/logo.png"}]]
    [:div.glossary-order
     [:div.glossary-order-inner
