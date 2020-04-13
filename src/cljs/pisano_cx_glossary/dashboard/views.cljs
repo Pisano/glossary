@@ -6,7 +6,6 @@
             [pisano-cx-glossary.util :as util]
             [clojure.string :as str]))
 
-
 (defn- html-render [content]
   [:div
    {:dangerouslySetInnerHTML
@@ -138,17 +137,23 @@
    [:h1 {:style {:width "80%"}} "Müşteri Deneyimi Sözlüğü"]
    [:h3 {:style {:width "80%"}} "Müşteri Deneyimi Yönetimi'nde en sık kullanılan 200 terim ve açıklamaları"]])
 
+(defn dispatch-by-uri
+  []
+  (let [href (some-> js/window .-location .-href)
+        [hash title id] (take-last 3 (str/split href #"/"))]
+    (if (and (= "#" hash)
+             (not (str/blank? title))
+             (not (str/blank? id)))
+      (dispatch [::events/find-and-set-content-by-id id]))))
 
 (defn dashboard-view []
   (r/create-class
     {:component-will-mount #(do
                               (dispatch [::events/get-pages])
-                              (let [href (some-> js/window .-location .-href)
-                                    [hash title id] (take-last 3 (str/split href #"/"))]
-                                (if (and (= "#" hash)
-                                         (not (str/blank? title))
-                                         (not (str/blank? id)))
-                                  (dispatch [::events/find-and-set-content-by-id id]))))
+                              (dispatch-by-uri))
+     :component-did-mount (fn []
+                            ;; Doing this manually, CLJS version has some odd bug with secretary.
+                            (.addEventListener js/window "hashchange" #(dispatch-by-uri)))
      :reagent-render       (fn []
                              (let [page           @(subscribe [::subs/active-page])
                                    active-letter  @(subscribe [::subs/active-letter])
