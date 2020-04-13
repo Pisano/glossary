@@ -2,4 +2,4 @@
 
 (def default-db
   {:name "pisano-cx-glossary"
-   :active-letter "A"})
+   :active-letter nil})
