@@ -71,7 +71,7 @@
 
 
 (defn- main-box-view [page active-content]
-  [:div.glossary-term-enrty
+  [:div.glossary-term-entry
    [:div.term-header
     [:h1.term-title
      [html-render (:title active-content)]]]
