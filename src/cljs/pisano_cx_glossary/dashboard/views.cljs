@@ -24,9 +24,9 @@
 
 
 (defn select-content
-  [title id]
+  [slug id]
   (dispatch [::events/find-and-set-content-by-id id])
-  (change-uri! title id))
+  (change-uri! slug id))
 
 
 (defn- vocabulary-box-view [active-letter]
@@ -43,7 +43,7 @@
                         (dispatch-sync [:add-data [:active-letter] l])
                         (util/sleep (fn []
                                       (let [active-page (->> @(subscribe [::subs/active-page]) (util/sort-by-locale :title) first)]
-                                        (select-content (:title active-page) (:id active-page))))
+                                        (select-content (:slug active-page) (:id active-page))))
                                     150))
            :class    (when (= l active-letter) "is-active")
            :style    (when-not (get @(subscribe [::subs/data]) l) {:color "#d9dbe5"})}
@@ -57,7 +57,7 @@
      (for [p (util/sort-by-locale :title page)]
        ^{:key (:id p)}
        [:a.terms-item
-        {:on-click #(select-content (:title p) (:id p))
+        {:on-click #(select-content (:slug p) (:id p))
          :style    (when (= @(subscribe [::subs/active-content-id]) (:id p)) {:color "#2e81e8"})}
         (:title p)]))])
 
