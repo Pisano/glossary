@@ -52,7 +52,8 @@
 
 (defn- titles-view [active-letter page]
   [:div
-   [:img.big-letter {:src (str "./img/letters/" active-letter ".png")}]
+   [:div.flex.justify-content-center
+    [:img.big-letter {:src (str "./img/letters/" active-letter ".png")}]]
    (doall
      (for [p (util/sort-by-locale :title page)]
        ^{:key (:id p)}

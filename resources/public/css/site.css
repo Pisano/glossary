@@ -293,10 +293,9 @@ figure {
 }
 img.big-letter {
   margin-top: 35px;
-  width: 124px;
+  width: auto;
   height: 124px;
   margin-bottom: 5px;
-  margin-left: 71px;
   transform: translateX(-100%);
   -webkit-transform: translateX(-100%);
   animation: slide-in 0.3s forwards;
@@ -304,4 +303,10 @@ img.big-letter {
 }
 h3 {
   font-size: 18px;
+}
+.flex {
+  display: flex;
+}
+.justify-content-center {
+  justify-content: center;
 }
