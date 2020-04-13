@@ -73,7 +73,7 @@
 (defn- build-tweet-text
   [title current-path]
   (str "https://twitter.com/intent/tweet"
-       "?text=" (js/encodeURIComponent (str "Pisano Müşteri Deneyimi Sözlüğü: " title))
+       "?text=" (js/encodeURIComponent (str title " Nedir? | Pisano Müşteri Deneyimi Sözlüğü"))
        "&url="  (js/encodeURIComponent current-path)
        "&via="  (js/encodeURIComponent "Pisano_TR")))
 
@@ -81,7 +81,7 @@
   [title current-path]
   (str "https://www.linkedin.com/shareArticle?mini=true"
        "&url="     "https://sozluk.pisano.co"
-       "&title="   (js/encodeURIComponent title)
+       "&title="   (js/encodeURIComponent (str title " Nedir? | Pisano Müşteri Deneyimi Sözlüğü"))
        "&summary=" (js/encodeURIComponent "Pisano Müşteri Deneyimi Sözlüğü")))
 
 
