@@ -58,7 +58,7 @@ h1 {
   padding: 1.5rem 2.2rem;
   width: calc(~"100% + 36px");
   height: 100%;
-  margin-left: -18px;
+  margin-left: -9px;
   overflow-y: auto;
   box-sizing: border-box;
 }
@@ -143,6 +143,22 @@ h1 {
   transition: .2s;
   cursor: pointer;
   font-weight: initial;
+  transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  .slide-in();
+}
+
+.slide-in {
+  animation: slide-in 0.3s forwards;
+  -webkit-animation: slide-in 0.3s forwards;
+}
+
+@keyframes slide-in {
+  100% { transform: translateX(0%); }
+}
+
+@-webkit-keyframes slide-in {
+  100% { -webkit-transform: translateX(0%); }
 }
 
 .glossary .glossary-terms .glossary-terms-inner .glossary-term-container .terms-item:hover {
@@ -288,6 +304,9 @@ img.big-letter {
   height: 124px;
   margin-bottom: 5px;
   margin-left: 71px;
+  transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  .slide-in();
 }
 
 h3 {
