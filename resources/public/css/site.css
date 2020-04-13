@@ -180,6 +180,10 @@ h1 {
   justify-content: space-between;
   align-items: center;
 }
+.term-header-container h1 {
+  font-size: 24px;
+  font-weight: bold;
+}
 .glossary .glossary-term-entry .term-header .term-title {
   color: #1a2534;
   text-align: left;
@@ -275,4 +279,7 @@ img.big-letter {
   height: 124px;
   margin-bottom: 5px;
   margin-left: 71px;
+}
+h3 {
+  font-size: 18px;
 }
