@@ -52,7 +52,7 @@
 
 (defn- titles-view [active-letter page]
   [:div
-   [:img.big-letter {:src "./img/A.png"}]
+   [:img.big-letter {:src (str "./img/letters/" active-letter ".png")}]
    (doall
      (for [p (util/sort-by-locale :title page)]
        ^{:key (:id p)}
@@ -103,6 +103,7 @@
 (defn- navbar-view
   []
   [:div.navbar
+   [:a.navbar-link {:target "_blank" :href "https://www.pisano.co/tr"} "Pisano"]
    [:a.navbar-link {:target "_blank" :href "https://www.pisano.co/tr/tur"} "Platform Turu"]
    [:a.navbar-link {:target "_blank" :href "https://www.pisano.co/tr/incelemeler"} "Nasıl Çalışır"]
    [:a.navbar-link {:target "_blank" :href "https://www.pisano.co/tr/blog"} "Blog"]])
