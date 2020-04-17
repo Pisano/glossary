@@ -12,8 +12,7 @@
                  [yogthos/config "1.1.7"]
                  [day8.re-frame/http-fx "0.1.6"]
                  [cljs-ajax "0.8.0"]
-                 [ring "1.7.1"]
-                 [lein-autoprefixer "0.1.1"]]
+                 [ring "1.7.1"]]
 
   :plugins [
             [lein-less "1.7.5"]
@@ -41,11 +40,6 @@
                              :linux   "xdg-open"}
                      "npx"  {:macosx "npx"
                              :linux  "npx"}}}
-
-  :autoprefixer {:src "resources/public/css"
-                 ;; optional
-                 ;:browsers "> 1%, Last 2 versions"
-                 }
 
   :aliases {"dev"          ["with-profile" "dev" "do"
                             ["run" "-m" "shadow.cljs.devtools.cli" "watch" "app"]]
