@@ -12,7 +12,8 @@
                  [yogthos/config "1.1.7"]
                  [day8.re-frame/http-fx "0.1.6"]
                  [cljs-ajax "0.8.0"]
-                 [ring "1.7.1"]]
+                 [ring "1.7.1"]
+                 [lein-autoprefixer "0.1.1"]]
 
   :plugins [
             [lein-less "1.7.5"]
@@ -26,7 +27,7 @@
 
   :resource-paths ["resources"]
 
-  :test-paths   ["test/cljs"]
+  :test-paths ["test/cljs"]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"
                                     "test/js"]
@@ -37,7 +38,14 @@
 
   :shell {:commands {"open" {:windows ["cmd" "/c" "start"]
                              :macosx  "open"
-                             :linux   "xdg-open"}}}
+                             :linux   "xdg-open"}
+                     "npx"  {:macosx "npx"
+                             :linux  "npx"}}}
+
+  :autoprefixer {:src "resources/public/css"
+                 ;; optional
+                 ;:browsers "> 1%, Last 2 versions"
+                 }
 
   :aliases {"dev"          ["with-profile" "dev" "do"
                             ["run" "-m" "shadow.cljs.devtools.cli" "watch" "app"]]
@@ -52,11 +60,11 @@
 
   :profiles
   {:dev
-   {:dependencies [[binaryage/devtools "0.9.11"]
-                   [day8.re-frame/re-frame-10x "0.4.4"]
-                   [day8.re-frame/tracing "0.5.3"]]}
+            {:dependencies [[binaryage/devtools "0.9.11"]
+                            [day8.re-frame/re-frame-10x "0.4.4"]
+                            [day8.re-frame/tracing "0.5.3"]]}
 
-   :prod { :dependencies [[day8.re-frame/tracing-stubs "0.5.3"]]}
+   :prod    {:dependencies [[day8.re-frame/tracing-stubs "0.5.3"]]}
 
    :uberjar {:source-paths ["env/prod/clj"]
              :dependencies [[day8.re-frame/tracing-stubs "0.5.3"]]
@@ -64,7 +72,7 @@
              :main         pisano-cx-glossary.server
              :aot          [pisano-cx-glossary.server]
              :uberjar-name "pisano-cx-glossary.jar"
-             :prep-tasks   ["compile" ["prod"]["less" "once"]]}}
+             :prep-tasks   ["compile" ["prod"] ["less" "once"]]}}
 
-  :prep-tasks [
-               ["less" "once"]])
+  :prep-tasks [["less" "once"]
+               ["shell" "npx" "postcss" "resources/public/css/*.css" "--use" "autoprefixer" "-d" "resources/public/css"]])
