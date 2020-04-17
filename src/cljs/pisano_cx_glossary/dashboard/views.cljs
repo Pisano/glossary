@@ -11,7 +11,6 @@
    {:dangerouslySetInnerHTML
     {:__html content}}])
 
-
 (defn- change-uri!
   [title id]
   (util/push-state (str "/#/" (some-> title
@@ -21,55 +20,44 @@
                                       (str/replace #"/+" "-")
                                       (str/replace #"-+" "-")) "/" id)))
 
-
 (defn select-content
   [slug id]
   (dispatch [::events/find-and-set-content-by-id id])
   (change-uri! slug id))
 
-
-(defn- vocabulary-box-view [active-letter]
-  [:div.glossary-aside
-   [:a.glossary-logo
+(defn- letters-view
+  [active-letter]
+  [:div.letters
+   [:a.logo
     {:href "/"}
     [:img {:src "img/logo.png"}]]
-   [:div.glossary-order
-    [:div.glossary-order-inner
-     (doall
-       (for [l (util/sort-by-locale (keys @(subscribe [::subs/data])))]
-         ^{:key l}
-         [:div.order-item
-          {:on-click #(when (get @(subscribe [::subs/data]) l)
-                        (dispatch-sync [:add-data [:active-letter] l])
-                        (util/sleep (fn []
-                                      (let [active-page (->> @(subscribe [::subs/active-page]) (util/sort-by-locale :title) first)]
-                                        (select-content (:slug active-page) (:id active-page))))
-                                    150))
-           :class    (when (= l active-letter) "is-active")
-           :style    (when-not (get @(subscribe [::subs/data]) l) {:color "#d9dbe5"})}
-          l]))]]])
+   [:div.letters-container
+    (doall
+      (for [l (util/sort-by-locale (keys @(subscribe [::subs/data])))]
+        ^{:key l}
+        [:div.letter
+         {:on-click #(when (get @(subscribe [::subs/data]) l)
+                       (dispatch-sync [:add-data [:active-letter] l])
+                       (util/sleep (fn []
+                                     (let [active-page (->> @(subscribe [::subs/active-page]) (util/sort-by-locale :title) first)]
+                                       (select-content (:slug active-page) (:id active-page))))
+                                   150))
+          :class    (when (= l active-letter) "is-active")
+          :style    (when-not (get @(subscribe [::subs/data]) l) {:color "#d9dbe5"})}
+         l]))]])
 
-
-(defn- titles-view [active-letter page]
-  [:div
-   [:div.flex.justify-content-center
+(defn- content-title-box-view
+  [active-letter page]
+  [:div.posts
+   [:div.big-letter-container
     [:img.big-letter {:src (str "./img/letters/" active-letter ".png")}]]
    (doall
      (for [p (util/sort-by-locale :title page)]
        ^{:key (:id p)}
-       [:a.terms-item
+       [:div.post
         {:on-click #(select-content (:slug p) (:id p))
          :style    (when (= @(subscribe [::subs/active-content-id]) (:id p)) {:color "#2e81e8"})}
         (:title p)]))])
-
-
-(defn- content-title-box-view [active-letter page active-content]
-  [:div.glossary-terms
-   [:div.glossary-terms-inner
-    [:div.glossary-term-container
-     [:div.term-image-a
-      {:key (str "content-title-box-view-" active-letter)}]
-     [titles-view active-letter page]]]])
 
 (defn- build-tweet-text
   [title current-path]
@@ -85,10 +73,9 @@
        "&title="   (js/encodeURIComponent (str title " Nedir? | Pisano Müşteri Deneyimi Sözlüğü"))
        "&summary=" (js/encodeURIComponent "Pisano Müşteri Deneyimi Sözlüğü")))
 
-
 (defn- render-social-share-buttons
   [title]
-  (let [current-path (. (. js/document -location) -href)]
+  (let [current-path (.-href (.-location js/document))]
     [:div
      [:a.social-button 
       {:target "_blank" :href (str "http://www.facebook.com/sharer.php?u=" current-path)}
@@ -100,7 +87,6 @@
       {:target "_blank" :href (build-linkedin-post title current-path)}
       [:img {:src "./img/linkedin.png"}]]]))
 
-
 (defn- navbar-view
   []
   [:div.navbar
@@ -109,26 +95,23 @@
    [:a.navbar-link {:target "_blank" :href "https://www.pisano.co/tr/incelemeler"} "Nasıl Çalışır"]
    [:a.navbar-link {:target "_blank" :href "https://www.pisano.co/tr/blog"} "Blog"]])
 
-
 (defn- main-box-view [page active-content]
   [:<>
-   [:div.glossary-term-entry
+   [:div.content
     [navbar-view]
-    [:div.term-header
-     [:div.term-title-image]]
-    [:div.term-description
-     [:div.container
-      [:div.term-header-container
-       [:h1.term-title [html-render (:title active-content)]]
-       (render-social-share-buttons (:title active-content))]
+    [:div.header-image]
+    [:div.container
+     [:div.term-header-container
+      [:h1.term-title [html-render (:title active-content)]]
+      (render-social-share-buttons (:title active-content))]
+     [:div.ghost-content
       [html-render (:html active-content)]
       [html-render (:tag active-content)]]]]])
-
 
 (defn- render-content-view
   [active-letter page active-content]
   [:<>
-   [content-title-box-view active-letter page active-content]
+   [content-title-box-view active-letter page]
    [main-box-view page active-content]])
 
 (defn- welcome-screen-view
@@ -158,8 +141,8 @@
                              (let [page           @(subscribe [::subs/active-page])
                                    active-letter  @(subscribe [::subs/active-letter])
                                    active-content @(subscribe [::subs/active-content])]
-                               [:div.glossary.glossary-entry.is-active
-                                [vocabulary-box-view active-letter]
+                               [:<>
+                                [letters-view active-letter]
                                 (if (nil? active-letter)
                                   [welcome-screen-view]
                                   (render-content-view active-letter page active-content))]))}))

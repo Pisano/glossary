@@ -14,8 +14,7 @@
                  [cljs-ajax "0.8.0"]
                  [ring "1.7.1"]]
 
-  :plugins [
-            [lein-less "1.7.5"]
+  :plugins [[lein-less "1.7.5"]
             [lein-shell "0.5.0"]
             [lein-kibit "0.1.8"]
             [lein-cljfmt "0.6.4"]]
