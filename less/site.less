@@ -99,7 +99,7 @@ figure {
     cursor: pointer;
     transition: .2s;
 
-    &:hover {
+    &:hover, &.is-active {
       color: #fff;
       background-color: #2e81e8;
     }
@@ -289,8 +289,12 @@ h1 {
     position: absolute;
     width: 100%;
     height: 100%;
-    padding-top: 64px;
+    padding-top: 1rem;
     z-index: 100000;
+
+    .big-letter-container {
+      margin-top: 0;
+    }
   }
 
   .content {
