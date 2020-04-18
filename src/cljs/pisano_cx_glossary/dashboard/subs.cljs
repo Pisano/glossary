@@ -52,3 +52,8 @@
           key-does-not-exist (set/difference (set alphabet) (set key-exists))
           dummy-map          (apply merge (map #(hash-map %1 nil) key-does-not-exist))]
       (into (sorted-map) (merge group-data dummy-map)))))
+
+(reg-sub
+  ::posts-index-visible
+  (fn [db]
+    (:display-posts-index-on-mobile db)))

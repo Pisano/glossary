@@ -73,3 +73,8 @@
            (not= (count (:pages db)) (-> db :meta :total))) {:dispatch-later [{:ms 200 :dispatch [::select-first-content]}]}
 
       :else {:db db})))
+
+(reg-event-db
+  ::toggle-posts-index
+  (fn [db [_ visible]]
+    (assoc-in db [:display-posts-index-on-mobile] visible)))

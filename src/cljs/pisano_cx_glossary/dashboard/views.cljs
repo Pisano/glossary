@@ -6,6 +6,11 @@
             [pisano-cx-glossary.util :as util]
             [clojure.string :as str]))
 
+(defn dispatch-n
+  [& args]
+  (doseq [k args]
+    (dispatch (if (vector? k) k (vector k)))))
+
 (defn- html-render [content]
   [:div
    {:dangerouslySetInnerHTML
@@ -37,7 +42,8 @@
         ^{:key l}
         [:div.letter
          {:on-click #(when (get @(subscribe [::subs/data]) l)
-                       (dispatch-sync [:add-data [:active-letter] l])
+                       (dispatch-n [:add-data [:active-letter] l]
+                                   [::events/toggle-posts-index true])
                        (util/sleep (fn []
                                      (let [active-page (->> @(subscribe [::subs/active-page]) (util/sort-by-locale :title) first)]
                                        (select-content (:slug active-page) (:id active-page))))
@@ -48,16 +54,23 @@
 
 (defn- content-title-box-view
   [active-letter page]
-  [:div.posts
-   [:div.big-letter-container
-    [:img.big-letter {:src (str "./img/letters/" active-letter ".png")}]]
-   (doall
-     (for [p (util/sort-by-locale :title page)]
-       ^{:key (:id p)}
-       [:div.post
-        {:on-click #(select-content (:slug p) (:id p))
-         :style    (when (= @(subscribe [::subs/active-content-id]) (:id p)) {:color "#2e81e8"})}
-        (:title p)]))])
+  (let [index-displayed? @(subscribe [::subs/posts-index-visible])
+        screen-width (.-innerWidth js/window)
+        mobile? (<= screen-width 720)]
+    (if (and mobile? (not (boolean index-displayed?)))
+      [:<>]
+      [:div.posts
+       [:div.big-letter-container
+        [:img.big-letter {:src (str "./img/letters/" active-letter ".png")}]]
+       (doall
+         (for [p (util/sort-by-locale :title page)]
+           ^{:key (:id p)}
+           [:div.post
+            {:on-click #(do
+                          (dispatch [::events/toggle-posts-index false])
+                          (select-content (:slug p) (:id p)))
+             :style    (when (= @(subscribe [::subs/active-content-id]) (:id p)) {:color "#2e81e8"})}
+            (:title p)]))])))
 
 (defn- build-tweet-text
   [title current-path]
@@ -90,9 +103,6 @@
 (defn- navbar-view
   []
   [:div.navbar
-   [:a.logo
-    {:href "/"}
-    [:img {:src "img/logo.png"}]]
    [:a.navbar-link {:target "_blank" :href "https://www.pisano.co/tr"} "Pisano"]
    [:a.navbar-link {:target "_blank" :href "https://www.pisano.co/tr/tur"} "Platform Turu"]
    [:a.navbar-link {:target "_blank" :href "https://www.pisano.co/tr/incelemeler"} "Nasıl Çalışır"]

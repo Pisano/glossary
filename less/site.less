@@ -277,32 +277,27 @@ h1 {
     }
 
     .logo {
-      display: none;
+      margin-bottom: 1rem;
+
+      > img {
+        width: 32px;
+      }
     }
   }
 
   .posts {
-    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding-top: 64px;
+    z-index: 100000;
   }
 
   .content {
     padding: 0;
 
     .navbar {
-      border-bottom: 1px solid #d9dbe5;
-      text-align: center;
-
-      .navbar-link {
-        display: none;
-      }
-
-      .logo {
-        display: block;
-
-        > img {
-          width: 40px;
-        }
-      }
+      display: none;
     }
 
     .header-image {
