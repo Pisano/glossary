@@ -287,9 +287,11 @@ h1 {
 
   .posts {
     position: absolute;
-    width: 100%;
+    width: ~"calc(100% - 54px)";
+    margin-left: 54px;
     height: 100%;
-    padding-top: 1rem;
+    padding: 1rem;
+    min-width: auto;
     z-index: 100000;
 
     .big-letter-container {
