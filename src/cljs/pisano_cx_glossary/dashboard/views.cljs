@@ -69,7 +69,7 @@
             {:on-click #(do
                           (dispatch [::events/toggle-posts-index false])
                           (select-content (:slug p) (:id p)))
-             :style    (when (= @(subscribe [::subs/active-content-id]) (:id p)) {:color "#2e81e8"})}
+             :class    (when (= @(subscribe [::subs/active-content-id]) (:id p)) "active")}
             (:title p)]))])))
 
 (defn- build-tweet-text
