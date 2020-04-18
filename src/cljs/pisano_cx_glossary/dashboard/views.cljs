@@ -90,6 +90,9 @@
 (defn- navbar-view
   []
   [:div.navbar
+   [:a.logo
+    {:href "/"}
+    [:img {:src "img/logo.png"}]]
    [:a.navbar-link {:target "_blank" :href "https://www.pisano.co/tr"} "Pisano"]
    [:a.navbar-link {:target "_blank" :href "https://www.pisano.co/tr/tur"} "Platform Turu"]
    [:a.navbar-link {:target "_blank" :href "https://www.pisano.co/tr/incelemeler"} "Nasıl Çalışır"]
