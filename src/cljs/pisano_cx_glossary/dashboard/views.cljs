@@ -69,7 +69,7 @@
 (defn- build-linkedin-post
   [title current-path]
   (str "https://www.linkedin.com/shareArticle?mini=true"
-       "&url="     "https://sozluk.pisano.co"
+       "&url="     (js/encodeURIComponent current-path)
        "&title="   (js/encodeURIComponent (str title " Nedir? | Pisano Müşteri Deneyimi Sözlüğü"))
        "&summary=" (js/encodeURIComponent "Pisano Müşteri Deneyimi Sözlüğü")))
 
@@ -78,7 +78,7 @@
   (let [current-path (.-href (.-location js/document))]
     [:div
      [:a.social-button 
-      {:target "_blank" :href (str "http://www.facebook.com/sharer.php?u=" current-path)}
+      {:target "_blank" :href (str "http://www.facebook.com/sharer.php?u=" (js/encodeURIComponent current-path))}
       [:img {:src "./img/facebook.png"}]]
      [:a.social-button
       {:target "_blank" :href (build-tweet-text title current-path)}
