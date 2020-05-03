@@ -9,8 +9,9 @@
 (reg-event-fx
   ::get-pages
   (fn [_ _]
-    {:http-xhrio (util/create-custom-request-map :get datasource-url
-                                                 ::get-pages-count-result-ok)}))
+    {:http-xhrio (util/create-custom-request-map {:method     :get
+                                                  :uri        datasource-url
+                                                  :on-success ::get-pages-count-result-ok})}))
 
 
 (reg-event-fx
@@ -24,9 +25,10 @@
 (reg-event-fx
   ::get-page-data
   (fn [_ [_ n]]
-    {:http-xhrio (util/create-custom-request-map :get (str datasource-url "&page=" n)
-                                                 ::get-page-data-result-ok
-                                                 [::get-page-data-result-fail n])}))
+    {:http-xhrio (util/create-custom-request-map {:method     :get
+                                                  :uri        (str datasource-url "&page=" n)
+                                                  :on-success ::get-page-data-result-ok
+                                                  :on-failure [::get-page-data-result-fail n]})}))
 
 
 (reg-event-db

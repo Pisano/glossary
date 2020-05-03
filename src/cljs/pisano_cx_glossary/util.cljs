@@ -2,46 +2,36 @@
   (:require [ajax.core :as ajax]
             [clojure.string :as str]))
 
-(defn create-custom-request-map
-  ([type uri]
-   (create-custom-request-map type uri nil nil))
-  ([type uri on-success]
-   (create-custom-request-map type uri on-success nil))
-  ([type uri on-success on-fail]
-   (cond-> {:method          type
-            :uri             uri
-            :format          (ajax/json-request-format)
-            :response-format (ajax/json-response-format {:keywords? true})
-            :on-success      (if (vector? on-success) on-success [on-success])
-            :on-failure      (if (vector? on-fail) on-fail [on-fail])}
-           (nil? on-success) (assoc :on-success [:no-http-on-ok])
-           (nil? on-fail) (assoc :on-failure [:no-http-on-failure]))))
+(def x->X {"ı" "I" 
+           "i" "İ"
+           "ç" "Ç"
+           "ö" "Ö"
+           "ü" "Ü"
+           "ğ" "Ğ"
+           "ş" "Ş"})
 
 
 (defn upper-case
   [s]
-  (some-> s
-          (str/replace #"ı" "I")
-          (str/replace #"i" "İ")
-          (str/replace #"ç" "Ç")
-          (str/replace #"ö" "Ö")
-          (str/replace #"ü" "Ü")
-          (str/replace #"ğ" "Ğ")
-          (str/replace #"ş" "Ş")
-          (str/upper-case)))
+  (when s
+    (reduce-kv (fn [acc x X] (str/replace acc x X)) (str/upper-case s) x->X)))
 
 
 (defn lower-case
   [s]
-  (some-> s
-      (str/replace #"I" "ı")
-      (str/replace #"İ" "i")
-      (str/replace #"Ç" "ç")
-      (str/replace #"Ö" "ö")
-      (str/replace #"Ü" "ü")
-      (str/replace #"Ğ" "ğ")
-      (str/replace #"Ş" "ş")
-      (str/lower-case)))
+  (when s
+    (reduce-kv (fn [acc x X] (str/replace acc X x)) (str/lower-case s) x->X)))
+
+
+(defn create-custom-request-map
+  [{:keys [method uri on-success on-failure] :or {on-success [:no-http-on-ok]
+                                                  on-failure [:no-http-on-failure]}}]
+  {:method          method
+   :uri             uri
+   :format          (ajax/json-request-format)
+   :response-format (ajax/json-response-format {:keywords? true})
+   :on-success      (if (vector? on-success) on-success [on-success])
+   :on-failure      (if (vector? on-failure) on-failure [on-failure])})
 
 
 (defn sleep
