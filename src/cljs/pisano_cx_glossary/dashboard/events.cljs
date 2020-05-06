@@ -18,7 +18,7 @@
   (fn [{:keys [db]} [_ response]]
     (let [page-count (-> response :meta :pagination :pages)]
       {:db         (assoc db :page-count page-count)
-       :dispatch-n (reduce #(conj %1 [::get-page-data %2]) [] (range 1 (inc page-count)))})))
+       :dispatch-n (mapv #(vector ::get-page-data %) (range 1 (inc page-count)))})))
 
 
 (reg-event-fx
@@ -32,8 +32,9 @@
 (reg-event-db
   ::get-page-data-result-ok
   (fn [db [_ response]]
-    (let [db (update db :pages concat (:pages response))]
-      (assoc db :meta (-> response :meta :pagination (select-keys [:total :pages :limit]))))))
+    (let [pages (concat (:pages db) (:pages response))
+          meta (-> response :meta :pagination (select-keys [:total :pages :limit]))]
+      (assoc db :pages pages :meta meta))))
 
 
 (reg-event-fx
@@ -52,8 +53,8 @@
   ::find-and-set-content-by-id
   (fn [{:keys [db]} [_ id]]
     (if-let [content (some #(when (= id (:id %)) %) (:pages db))]
-      (let [db (assoc db :active-content-id id)]
-        {:db            (assoc db :active-letter (some-> content :title util/upper-case first str))
+      (let [active-letter (some-> content :title first util/upper-case)]
+        {:db            (assoc db :active-content-id id :active-letter active-letter)
          :change-title! (:title content)})
       {:dispatch-later [{:ms 150 :dispatch [::find-and-set-content-by-id id]}]})))
 
@@ -77,4 +78,4 @@
 (reg-event-db
   ::toggle-posts-index
   (fn [db [_ visible]]
-    (assoc-in db [:display-posts-index-on-mobile] visible)))
+    (assoc db :display-posts-index-on-mobile visible)))
